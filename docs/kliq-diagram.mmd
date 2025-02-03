@@ -8,77 +8,40 @@ graph LR
         </div>
     ))
 
-    collector(
+    kliq_collect(
         <div style="width:48px;height:auto;margin:0 3px;">
             <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/golang.svg"/>
         </div>
         Collector
     )
 
-    collector_broker(
-        <div style="width:48px;height:auto">
+    kliq_kafka(
+        <div style="width:48px;height:auto;margin:5px 48px;">
             <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-kafka.svg"/>
         </div>
+        Event Broker
     )
 
-    collector_ingest(
+    kliq_stream(
         <div style="width:48px;height:auto;margin:5px 48px;">
             <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
         </div>
-        Streaming Ingest Job
+        Stream Job
     )
-
-    hdfs[(
-        <div style="width:64px;height:auto;">
-            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-hadoop.svg"/>
-        </div>  
-    )]
-
-    batch_job(
-        <div style="width:48px;height:auto;margin:5px 5px;">
-            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
-        </div>
-        Job
-    )
-
-    batch_airflow_scheduler(
-        <div style="width:48px;height:auto;margin:5px 32px;">
-            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-airflow.svg"/>
-        </div>
-        Job Scheduler
-    )
-
-    internal_consumers((
-        <div style="width:64px;height:auto;">
-            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/88157206502ff6c077a9946767a28f35a6e12e08/users.svg"/>
-        </div>
-    ))
 
     %% Styles
         style client                    stroke:#ffffff,fill:#ffffff
-        style collector                 stroke:#111111
-        style collector_broker          stroke:#000000,fill:#ffffff
-        style collector_ingest          stroke:#ca4000
-        style batch_job                 stroke:#ca4000
-        style batch_airflow_scheduler   stroke:#0052cc
-        style internal_consumers        stroke:#ffffff,fill:#ffffff
+        style kliq_collect              stroke:#111111
+        style kliq_kafka                stroke:#000000,fill:#eeeeee
+        style kliq_stream               stroke:#ca4000
     %% %
 %% %
 
 %% Subgraphs
-    subgraph Collector Service
-        collector
-        collector_broker
-        collector_ingest
-    end
-
-    subgraph Batch Service
-        batch_job
-        batch_airflow_scheduler
-    end
-
-    subgraph Internal Consumers
-        internal_consumers
+    subgraph Collect Service
+        kliq_collect
+        kliq_kafka
+        kliq_stream
     end
 
     %% Styles
@@ -86,12 +49,6 @@ graph LR
 %% %
 
 %% Relations
-    client    --raw event--> collector
-    collector --raw event--> collector_broker --raw event--> collector_ingest --raw event--> hdfs
-
-    batch_airflow_scheduler -.trigger.->               batch_job        
-    hdfs                    --read raw event-->        batch_job
-    batch_job               --write processed event--> hdfs
-
-    hdfs --read--> internal_consumers
+    client       --raw event--> kliq_collect
+    kliq_collect --raw event--> kliq_kafka --raw event--> kliq_stream
 %% %
