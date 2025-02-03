@@ -1,0 +1,3 @@
+include:
+  - kliq-kafka.yml
+  - kliq-collect.yml

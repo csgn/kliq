@@ -1,0 +1,41 @@
+services:
+  kliq-kafka-zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: ${KLIQ_KAFKA__ZOOKEEPER_HOST}
+    ports:
+      - ${KLIQ_KAFKA__ZOOKEEPER_PORT}:${KLIQ_KAFKA__ZOOKEEPER_PORT}
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${KLIQ_KAFKA__ZOOKEEPER_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+  kliq-kafka:
+    hostname: ${KLIQ_KAFKA__HOST}
+    image: confluentinc/cp-kafka:7.5.0
+    ports:
+      - ${KLIQ_KAFKA__PORT}:${KLIQ_KAFKA__PORT}
+      - ${KLIQ_KAFKA__ALT_PORT}:${KLIQ_KAFKA__ALT_PORT}
+    depends_on:
+      - kliq-kafka-zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${KLIQ_KAFKA__ZOOKEEPER_HOST}:${KLIQ_KAFKA__ZOOKEEPER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KLIQ_KAFKA__ADDR},PLAINTEXT_HOST://localhost:${KLIQ_KAFKA__ALT_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: /bin/kafka-cluster cluster-id --bootstrap-server ${KLIQ_KAFKA__ADDR} || exit 1
+      interval: 10s
+      timeout: 60s
+      retries: 60
+  kliq-kafka-setup:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - kliq-kafka
+    environment:
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+              cub kafka-ready -b ${KLIQ_KAFKA__ADDR} 1 20 && \
+              kafka-topics --create --if-not-exists --partitions 1 --replication-factor 1 --bootstrap-server ${KLIQ_KAFKA__ADDR} --topic ${KLIQ_KAFKA__TOPIC} && \
+              echo Waiting 10 seconds for Connect to be ready... && \
+              sleep 10'"
