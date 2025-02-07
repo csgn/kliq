@@ -25,7 +25,6 @@ PRE_FLAGS := --file $(COMPOSE_ENTRYPOINT) 				\
 			 --env-file $(ENV_FILE)
 POST_FLAGS := --build --detach
 
-
 up:
 	$(CMD) $(PRE_FLAGS) up $(POST_FLAGS)
 

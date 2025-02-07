@@ -1,3 +1,5 @@
 include:
   - kliq-kafka.yml
   - kliq-collect.yml
+  - kliq-stream.yml
+  - kliq-hadoop.yml

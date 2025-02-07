@@ -1,0 +1,15 @@
+services:
+  kliq-stream:
+    build:
+      context: ../modules/kliq-stream
+      dockerfile: Dockerfile
+    depends_on:
+      kliq-hadoop:
+        condition: service_healthy
+      kliq-kafka:
+        condition: service_healthy
+    environment:
+      KLIQ_STREAM__KLIQ_KAFKA__ADDR: ${KLIQ_KAFKA__ADDR}
+      KLIQ_STREAM__KLIQ_KAFKA__TOPIC: ${KLIQ_KAFKA__TOPIC}
+      KLIQ_STREAM__KLIQ_HADOOP__URI: ${KLIQ_HADOOP__URI}
+      KLIQ_STREAM__KLIQ_HADOOP__DATA_RAW_DIR: ${KLIQ_HADOOP__DATA_RAW_DIR}

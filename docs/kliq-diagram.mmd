@@ -29,19 +29,55 @@ graph LR
         Stream Job
     )
 
+    kliq_hadoop[(
+        <div style="width:64px;height:auto;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-hadoop.svg"/>
+        </div>
+    )]
+
+    kliq_batch_job(
+        <div style="width:24px;height:auto">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-spark.svg"/>
+        </div>
+    )
+
+    kliq_batch_airflow(
+        <div style="width:24px;height:auto">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/7e32bac6bfbbc40b314eff31adab396f3854b1c1/apache-airflow.svg"/>
+        </div>
+    )
+
+    internal_consumers((
+        <div style="width:64px;height:auto;">
+            <img src="https://raw.githubusercontent.com/gist/csgn/bf32c290e6a395de55268f75f0e5af2f/raw/88157206502ff6c077a9946767a28f35a6e12e08/users.svg"/>
+        </div>
+    ))
+
     %% Styles
         style client                    stroke:#ffffff,fill:#ffffff
         style kliq_collect              stroke:#111111
         style kliq_kafka                stroke:#000000,fill:#eeeeee
         style kliq_stream               stroke:#ca4000
+        style kliq_batch_job            stroke:#ca4000
+        style kliq_batch_airflow        stroke:#0052cc
     %% %
 %% %
 
 %% Subgraphs
-    subgraph Collect Service
+    subgraph Kliq Service
         kliq_collect
         kliq_kafka
         kliq_stream
+        kliq_hadoop
+
+        subgraph Batch Job
+            kliq_batch_job
+            kliq_batch_airflow
+        end
+    end
+
+    subgraph Internal Consumers
+        internal_consumers
     end
 
     %% Styles
@@ -50,5 +86,11 @@ graph LR
 
 %% Relations
     client       --raw event--> kliq_collect
-    kliq_collect --raw event--> kliq_kafka --raw event--> kliq_stream
+    kliq_collect --raw event--> kliq_kafka --raw event--> kliq_stream  --raw event--> kliq_hadoop
+
+    kliq_batch_airflow           -.trigger.->               kliq_batch_job        
+    kliq_hadoop                  --read raw event-->        kliq_batch_job
+    kliq_batch_job               --write processed event--> kliq_hadoop
+    
+    kliq_hadoop --read processed event--> internal_consumers
 %% %

@@ -1,0 +1,21 @@
+services:
+  kliq-hadoop:
+    hostname: kliq-hadoop
+    build:
+      context: ../modules/kliq-hadoop
+      dockerfile: Dockerfile
+    # https://kontext.tech/article/265/default-ports-used-by-hadoop-services-hdfs-mapreduce-yarn
+    ports:
+      # ssh
+      - 22:22
+
+      # namenode webui
+      - 9870:9870 # http
+      
+      # namenode metadata service
+      - 9000:9000
+    healthcheck:
+      test: /app/healthcheck.sh || exit 1
+      interval: 10s
+      timeout: 60s
+      retries: 60

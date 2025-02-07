@@ -43,11 +43,12 @@ $ ENV=dev make summary
 ```
 
 # Modules
-| Service                               | Description                                                                       |                                             
-| ------------------------------------- | ----------------------------------------------------------------------------------|
-| [kliq-collect](/docs/kliq-collect.md) | Exposes an HTTP server to collect user events and sent them into the kafka topic. |
-| [kliq-kafka](/docs/kliq-kafka.md)     | A message broker for events.                                                      |
-
+| Service                               | Description                                                                        |                                              
+| ------------------------------------- | ---------------------------------------------------------------------------------- |
+| [kliq-collect](/docs/kliq-collect.md) | Exposes an HTTP server to collect user events and sent them into the kafka topic.  |
+| [kliq-kafka](/docs/kliq-kafka.md)     | A message broker for events.                                                       |
+| [kliq-stream](/docs/kliq-stream.md)   | Stream process for ingesting.                                                      |
+| [kliq-hadoop](/docs/kliq-hadoop.md)   | Events storage.                                                                    |
 
 # License
 ```
