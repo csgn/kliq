@@ -1,0 +1,9 @@
+%% docs/resources/kliq-batch-stages-diagram.png
+
+stateDiagram-v2
+    [*] --> prepare_raw_events
+    prepare_raw_events --> [*]: failed
+    prepare_raw_events --> process_raw_events: success
+    process_raw_events --> [*]: failed
+    process_raw_events --> archive_raw_events: success
+    archive_raw_events --> [*]

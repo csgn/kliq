@@ -3,3 +3,4 @@ include:
   - kliq-collect.yml
   - kliq-stream.yml
   - kliq-hadoop.yml
+  - kliq-batch.yml

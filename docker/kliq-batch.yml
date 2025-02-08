@@ -1,0 +1,16 @@
+services:
+  kliq-batch:
+    build:
+      context: ../modules/kliq-batch
+      dockerfile: Dockerfile
+    ports:
+      - ${KLIQ_BATCH__WEBUI_PORT}:8080
+    depends_on:
+      kliq-hadoop:
+        condition: service_healthy
+    environment:
+      KLIQ_BATCH__KLIQ_HADOOP__URI: ${KLIQ_HADOOP__URI}
+      KLIQ_BATCH__KLIQ_HADOOP__DATA_RAW_DIR: ${KLIQ_HADOOP__DATA_RAW_DIR}
+      KLIQ_BATCH__KLIQ_HADOOP__DATA_STAGE_DIR: ${KLIQ_HADOOP__DATA_STAGE_DIR}
+      KLIQ_BATCH__KLIQ_HADOOP__DATA_ARCHIVE_DIR: ${KLIQ_HADOOP__DATA_ARCHIVE_DIR}
+      KLIQ_BATCH__KLIQ_HADOOP__DATA_FINAL_DIR: ${KLIQ_HADOOP__DATA_FINAL_DIR}
