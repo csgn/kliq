@@ -3,11 +3,14 @@ services:
     build:
       context: ../modules/kliq-stream
       dockerfile: Dockerfile
+    ports:
+      - ${KLIQ_STREAM__SPARK_UI}:4040
     depends_on:
       kliq-hadoop:
         condition: service_healthy
       kliq-kafka:
         condition: service_healthy
+    restart: always
     environment:
       KLIQ_STREAM__KLIQ_KAFKA__ADDR: ${KLIQ_KAFKA__ADDR}
       KLIQ_STREAM__KLIQ_KAFKA__TOPIC: ${KLIQ_KAFKA__TOPIC}
