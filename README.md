@@ -49,6 +49,8 @@ $ ENV=dev make summary
 | [kliq-kafka](/docs/kliq-kafka.md)     | A message broker for events.                                                       |
 | [kliq-stream](/docs/kliq-stream.md)   | Stream process for ingesting.                                                      |
 | [kliq-hadoop](/docs/kliq-hadoop.md)   | Events storage.                                                                    |
+| [kliq-batch](/docs/kliq-batch.md)     | Reorganize the raw events.                                                         |
+
 
 # License
 ```
