@@ -1,6 +1,6 @@
 services:
   kliq-hadoop:
-    hostname: kliq-hadoop
+    hostname: localhost
     build:
       context: ../modules/kliq-hadoop
       dockerfile: Dockerfile
@@ -14,6 +14,9 @@ services:
       
       # namenode metadata service
       - 9000:9000
+
+      # datanode
+      - 9864:9864
     healthcheck:
       test: /app/healthcheck.sh || exit 1
       interval: 10s
