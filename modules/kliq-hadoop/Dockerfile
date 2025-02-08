@@ -63,6 +63,10 @@ EXPOSE \
     9870 \
     # namenode metadata service
     9000 \
+
+    # datanote
+    9864 \
+
     # ssh
     22
 
