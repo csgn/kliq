@@ -64,5 +64,10 @@ img.onload = function() {
 
 Eventually, it's up to you that how to use these endpoints in your project.
 
+# Ports
+| Port        | Description                 |
+| ---         | ---                         |
+| 50051:50051 | Access to the HTTP service. |
+
 # Changelogs
 - [v0.1.0-alpha.1](/modules/kliq-collect/CHANGELOG.md#v010-alpha1)
