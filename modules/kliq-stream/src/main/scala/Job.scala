@@ -3,7 +3,12 @@ package kliq
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.{functions => F}
-import org.apache.spark.sql.streaming.{DataStreamWriter, Trigger}
+import org.apache.spark.sql.streaming.{
+  DataStreamWriter,
+  Trigger,
+  StreamingQuery,
+  StreamingQueryException
+}
 
 case class StreamJob(
     kafkaProps: KafkaProperties,
@@ -38,8 +43,22 @@ case class StreamJob(
       .option("checkpointLocation", s"${hadoopProps.uri}/checkpoint")
       .option("path", s"${hadoopProps.uri}/${hadoopProps.dataDir}")
 
-    val streamingQuery = writer.start()
-    streamingQuery.awaitTermination()
+    var streamingQuery: StreamingQuery = null
+    val max_retry = 10
+    var retry_count = 0
+    while (retry_count < max_retry) {
+      streamingQuery = writer.start()
+
+      try {
+        retry_count = 0
+        streamingQuery.awaitTermination()
+      } catch {
+        case e: StreamingQueryException => {
+          println("Streaming Query Exception: " + e)
+          retry_count += 1
+        }
+      }
+    }
 
     streamingQuery.stop()
   }
