@@ -22,13 +22,7 @@ object Main extends App {
     dataDir = envOrNone("KLIQ_STREAM__KLIQ_HADOOP__DATA_RAW_DIR").get
   )
 
-  try {
-    StreamJob(kafkaProps, hadoopProps).run
-  } catch {
-    case e: Exception => {
-      println(("########### SKIP ERRORS", e))
-    }
-  }
+  StreamJob(kafkaProps, hadoopProps).run
 
   spark.stop()
 }
