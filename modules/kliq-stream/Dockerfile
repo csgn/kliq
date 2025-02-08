@@ -62,4 +62,5 @@ RUN apk --update add bash
 WORKDIR /app
 COPY . .
 RUN sbt clean package
+EXPOSE 4040
 CMD ["sh", "-c", "spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_${SCALA_VERSION}:${SPARK_VERSION} --deploy-mode client ${TARGET_JAR}"]
