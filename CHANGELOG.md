@@ -5,3 +5,6 @@
 - Added docs
 - Added Makefile
 - Added [(env)](docker/env) folder for different deployments environments like development, production, etc.
+- Added kliq-hadoop [(kliq-hadoop/CHANGELOG)](modules/kliq-hadoop/CHANGELOG.md)
+- Added kliq-batch [(kliq-batch/CHANGELOG)](modules/kliq-batch/CHANGELOG.md)
+- Added test
